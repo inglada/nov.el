@@ -816,19 +816,17 @@ Saving is only done if `nov-save-place-file' is set."
     (error "Invalid nov.el link")))
 
 (defun nov-org-link-store ()
-  (when (not (and (eq major-mode 'nov-mode) nov-file-name))
-    (error "Not in a nov.el buffer"))
-  (when (not (integerp nov-documents-index))
-    (setq nov-documents-index 0))
-  (org-store-link-props
-   :type "nov"
-   :link (format "nov:%s::%d:%d" nov-file-name nov-documents-index (point))
-   :description (format "EPUB file at %s" nov-file-name)))
+  (when (eq major-mode 'nov-mode)   
+    (org-store-link-props
+     :type "nov"
+     :link (format "nov:%s::%d:%d" nov-file-name nov-documents-index (point))
+     :description (format "EPUB file at %s" nov-file-name)))
+  )
 
 (org-link-set-parameters
  "nov"
- :follow 'nov-org-link-follow
- :store 'nov-org-link-store)
+ :follow #'nov-org-link-follow
+ :store #'nov-org-link-store)
 
 (provide 'nov)
 ;;; nov.el ends here
